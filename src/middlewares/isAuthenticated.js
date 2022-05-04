@@ -8,10 +8,10 @@ export default async function isAuthenticated(req, res, next) {
 
     const { _id } = verify(loginToken, process.env.JWT_SECRET)
     const user = await Users.findById(_id)
-    if(!user) res.status(404).send({ message: 'User not found' })
+    if(!user) return res.status(404).send({ message: 'User not found' })
 
     req.user = user
-    next()   
+    next()
     
   } catch(error) {
     console.log(error)

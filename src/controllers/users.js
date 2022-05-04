@@ -1,7 +1,8 @@
+import { connection } from 'mongoose'
 import { v4 as uuidv4 } from 'uuid'
 import { randomBytes } from 'crypto'
 
-import { Users } from '../models'
+import { Users, Controllers } from '../models'
 import { signToken, encryptPassword } from '../utils'
 
 async function verifyExistingUser(username, email) {
@@ -67,14 +68,15 @@ export async function loginUser(req, res) {
 
 export async function deleteUser(req, res) {
   try {
-    const { _id } = req.user
-
-    const user = await Users.findByIdAndDelete(_id)
-    if(!user)
-      return res.status(404).send({ message: 'User not found' })
-
-    res.send({ message: 'User deleted successfully' })
+    const { _id: userId } = req.user
     
+    const session = await connection.startSession()
+    await session.withTransaction(async() => {
+      await Users.findByIdAndDelete(userId)
+      await Controllers.deleteMany({ userId })
+      res.send({ message: 'User data deleted successfully' })
+    })
+
   } catch(error) {
     console.log(error)
     res.sendStatus(500)

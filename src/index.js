@@ -5,7 +5,10 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
 
-import { users } from './routes'
+import {
+  users,
+  controllers
+} from './routes'
 
 const PORT = process.env.PORT || 8000
 
@@ -23,5 +26,6 @@ app.listen(PORT, () => {
 })
 
 app.use('/api/users', users)
+app.use('/api/controllers', controllers)
 
 export default app

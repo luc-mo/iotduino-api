@@ -9,6 +9,7 @@ const Users = model('User', new Schema({
   email: String,
   role: { type: String, enum: ['user', 'developer'], default: 'user' },
   apiToken: [{ type: String }],
+  controllers: [{ type: Schema.Types.ObjectId, ref: 'Controller' }],
 }));
 
 export default Users;

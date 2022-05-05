@@ -18,6 +18,7 @@ const PORT = process.env.PORT || 8000
 export const app = express()
 export const server = createServer(app)
 export const wsServer = new Server({ noServer: true })
+export const clients = new Map()
 
 app.use(express.json())
 app.use(cors())

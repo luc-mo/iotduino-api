@@ -12,6 +12,7 @@ import {
   controllers
 } from './routes'
 import { wsAuth } from './middlewares'
+import { onConnection } from './events'
 
 const PORT = process.env.PORT || 8000
 
@@ -33,10 +34,7 @@ server.listen(PORT, () => {
 })
 
 server.on('upgrade', wsAuth)
-
-wsServer.on('connection', (ws, req) => {
-  ws.send('Hello from the server')
-})
+wsServer.on('connection', onConnection)
 
 app.use('/api/users', users)
 app.use('/api/controllers', controllers)
